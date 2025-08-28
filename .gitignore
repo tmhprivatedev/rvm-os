@@ -1,0 +1,20 @@
+# Compiled files
+*.exe
+*.o
+*.obj
+*.out
+
+# Debug files
+*.pdb
+*.idb
+*.ilk
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.sln
+*.vcxproj*

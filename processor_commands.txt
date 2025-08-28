@@ -1,0 +1,119 @@
+//////////////////////////////
+INSTRUCTIONS:
+STOP 0000
+START 1111
+PUT 1100
+PUTD 1001
+SUB 0110
+JNZ 1101
+NCMPD 1110
+DELAY 0111
+CHMD 1011
+MULT 1010
+GET 1000
+ADD 0001
+RRN 0010
+CMP 0101
+NCMP 0100
+JZ 0011
+//////////////////////////////
+EXTERNAL INSTRUCTIONS:
+JMP 0100
+GETADDR 0010
+GOTO 1010
+INP 1101
+TINP 1100
+EXT 0110
+CLEARALL 0001
+DIV 0011
+JNZ 1001
+CLEAR 0101
+//////////////////////////////
+REGISTER NUMBERS:
+REG1 0001
+REG2 0010
+REG3 0011
+REG4 0100
+REG5 0101
+REG6 0110
+REG7 0111
+REG8 1000
+SYSTEM REG1 1001
+SYSTEM REG2 1010
+SYSTEM REG3 1011
+SYSTEM REG4 1100
+//////////////////////////////
+EXAMPLES OF PROGRAMS:
+1111 0111 0111 starting
+1011 0111 0111 change ouput mode to 1
+1001 0001 1111 register 1 now equals 15
+1010 0001 0101 register 1 now equals 75
+1000 0001 0111 printing register 1 value (k)
+1011 0111 0111 change output mode to 0
+1000 0001 0111 printing register 1 value (75)
+0111 0111 0000 stop
+
+1111 0111 0111 start
+1011 0111 0111 change ouput mode to 1
+1001 0001 1111 register 1 now equals 15
+1010 0001 0101 register 1 now equals 75
+0001 0001 0111 register 1 now equals 82
+1000 0001 0111 printing register 1 value (R)
+1101 0001 0111 clearing reg 1 value
+1001 0001 1111 register 1 now equals 15
+1010 0001 0101 register 1 now equals 75
+0001 0001 1011 register 1 now equals 86
+1000 0001 0111 printing register 1 value (V)
+1101 0001 0111 clearing reg 1 value
+1001 0001 1111 register 1 now equals 15
+1010 0001 0101 register 1 now equals 75
+0001 0001 0010 register 1 now equals 77
+1000 0001 0111 printing register 1 value (M)
+1101 0001 0111 clearing reg 1 value
+0111 0111 0000 stop
+
+//////////////////////////////
+DOCUMENTATION:
+OPCODES:
+	START - starts program
+	STOP - stops program
+	PUT - put register value to other register
+	PUTD - put decimal value to register
+	SUB - register 1 - value. saves value to register 1
+	CLEAR - clears register
+	CLEARALL - clears all registers and all memory
+	DELAY - it is not an opcode. it used to maintain the aesthetics of the code
+	CHMD - changing output mode. 0 decimals 1 symbols
+	MULT - register 1 * value
+	GET - printing register's value
+	ADD - register 1 + value
+	RRN - reservation of the system register (0x5)
+	CMP - compares the values of two registers
+	GETADDR - get register's memory address, saves in 2 system register
+	JMP - 
+USE:
+	START DELAY DELAY
+	DELAY DELAY STOP
+	PUT R1 R2
+	PUTD R1 0
+	SUB R1 R2
+	CLEAR R1 DELAY
+	CLEARALL DELAY DELAY || CLEARALL R1 DELAY (clears all memory and registers except register 1)
+	CHMD DELAY DELAY (if used a second time the output mode will be the opposite number (0 = 1; 1 = 0))
+	MULT R1 R2
+	GET R1 DELAY
+	ADD R1 R2
+	RRN R1 DELAY
+	CMP R1 R2
+	DELAY GETADDR R1
+	DELAY JMP R1
+	EXT 0x0 DELAY
+STANDARTS:
+	if the instruction takes less than 12 bits, then write DELAY (0111) in those places where the opcode is missing;
+	opcode START is always first. if you write it last or in the middle, the machine will not start
+	opcode STOP is always the last one. if you write it first or in the middle, the machine will not start
+
+	To use GETADDR (0010) and JMP (0100) and other external commands write DELAY (0111) first. these commands are additional.
+	example:
+	0111 0010 0001
+	DELAY GETADDR R1

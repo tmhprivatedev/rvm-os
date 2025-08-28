@@ -1,0 +1,96 @@
+# RVM OS Documentation
+
+## Overview
+RVM OS is a custom 12-bit virtual machine operating system with console-based graphical interfaces. It features a custom instruction set, memory management, and two GUI systems.
+
+## Architecture
+- 12-bit processor
+- 1MB memory space
+- 16 registers (12 general + 4 system)
+- Memory-mapped I/O
+
+## Instruction Set
+
+### Core Instructions
+START    = 0xF77   - Begin execution
+STOP     = 0x770   - Halt execution  
+PUT      = 0xC     - Copy register to register
+PUTD     = 0x9     - Load immediate value
+ADD      = 0x1     - Add registers
+SUB      = 0x6     - Subtract registers
+MULT     = 0xA     - Multiply registers
+GET      = 0x8     - Output register value
+JZ       = 0x3     - Jump if zero
+JNZ      = 0xD     - Jump if not zero
+
+### Extended Instructions (use DELAY 0x7 prefix)
+JMP      = 0x4     - Jump to address
+GETADDR  = 0x2     - Get memory address  
+INP      = 0xD     - Input character
+EXT      = 0x6     - External call
+CLEARALL = 0x1     - Clear all memory
+
+## Registers
+REG1-REG8    = General purpose (0x1-0x8)
+SYS_REG1-4   = System registers (0x9-0xC)
+
+## Example Program
+111101110111  ; START DELAY DELAY
+100100011111  ; PUTD R1 15
+101000010101  ; MULT R1 5 → 75
+000100010111  ; ADD R1 7 → 82 ('R')
+100000010111  ; GET R1 → output 'R'
+011101110000  ; STOP DELAY DELAY
+
+## GUI Systems
+
+### ROS (Console Shell)
+- Text-based interface
+- File manager
+- Text editor  
+- Calculator
+- System configuration
+
+### GROS (Graphical OS)
+- Window-based GUI in console
+- Desktop with icons
+- Drag & drop windows
+- Start menu
+- Animated transitions
+- Taskbar with clock
+
+## File Structure
+main.c      - VM core, processor emulation
+ROS.c       - Console shell interface  
+GROS.c      - Graphical window system
+*.rvm       - Binary program files
+system.cfg  - GUI mode configuration
+
+## Boot Process
+1. Initialize VM memory and registers
+2. Load KERNEL.rvm at address 256
+3. Execute BOOT.rvm from address 0
+4. Select GUI mode (ROS/GROS)
+5. Start user interface
+
+## Compilation
+gcc -o rvm main.c ROS.c GROS.c -luser32 -lgdi32
+
+## Usage
+Programs are text files with 12-bit instructions, one per line.
+Place .rvm files in rvm/ folder and load with loadProgram().
+
+## Performance
+- Emulated speed: ~100 KHz
+- Instruction rate: ~1000/sec
+- Graphics: 60 FPS in GROS mode
+
+## Key Features
+- Custom 12-bit architecture
+- Complete memory management
+- Two GUI systems in console
+- External program loading
+- Real-time clock display
+- Window management system
+
+This is a complete educational OS demonstrating computer architecture principles through software emulation.
